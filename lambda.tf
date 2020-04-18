@@ -81,7 +81,7 @@ resource "aws_lambda_function" "LambdaRotateIAMKeys" {
   filename         = "${data.archive_file.LambdaRotateIAMKeys.output_path}"
   function_name    = "LambdaRotateIAMKeys"
   role             = "${aws_iam_role.LambdaRotateIAMKeysRole.arn}"
-  handler          = "LambdaRotateIAMKey.handler"
+  handler          = "LambdaRotateIAMKeys.handler"
   source_code_hash = "${data.archive_file.LambdaRotateIAMKeys.output_base64sha256}"
   runtime          = "nodejs10.x"
   timeout          = 60

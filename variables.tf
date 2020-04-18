@@ -6,15 +6,11 @@ variable "aws_profile" {
   default = "torus"
 }
 
-variable "timeZone" {
-  default= "America/Lima"
+variable "adminEmail" {
+  default = "erick.yataco.s@gmail.com"
 }
 
-variable "startHour" {
-  default = "7"
-}
-
-variable "stopHour" {
-  default = "12"
+variable "rotateAge" {
+  default = "90"
 }
 
