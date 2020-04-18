@@ -2,6 +2,7 @@ const AWS = require('aws-sdk')
 // not all regions support ses
 AWS.config.update({region: 'us-east-1'});
 const IAM = new AWS.IAM()
+const SES = new AWS.SES()
 
 exports.handler = async (event, context) => {
 
@@ -23,6 +24,8 @@ exports.handler = async (event, context) => {
                             Status:      "Inactive", 
                             UserName:    user.UserName
                         }).promise()
+
+                        sendEmail(process.env.EMAIL,user.UserName,age,key.AccessKeyId)
                     }
                 }
             }
@@ -35,6 +38,39 @@ exports.handler = async (event, context) => {
         }
 
         return true
+
+    } catch (error) {
+
+        console.log('error: ',error)
+        return false
+
+    }
+
+}
+
+function sendEmail(emailTo,userName,age,accessKeyId){
+
+    try {
+
+        const data = 'Access key' +accessKeyId+ ' belong to user '+userName+' has been automatically deactivated due to it being ' +age+' days old.'
+
+        return await SES.sendEmail({
+            Destination: {
+                ToAddresses: [ emailTo ]
+            }, 
+            Message: {
+                Body: {
+                 Text: {
+                  Charset: "UTF-8", 
+                  Data: data
+                 }
+                }, 
+                Subject: {
+                 Charset: "UTF-8", 
+                 Data: "AWS IAM Access Key Rotation - Deactivation of Access Key "+accessKeyId
+                }
+            },
+        }).promise()
 
     } catch (error) {
 
