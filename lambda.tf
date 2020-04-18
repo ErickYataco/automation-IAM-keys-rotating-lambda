@@ -86,6 +86,13 @@ resource "aws_lambda_function" "LambdaRotateIAMKeys" {
   runtime          = "nodejs10.x"
   timeout          = 60
 
+  environment {
+    variables = {
+      MAX_AGE  = "${var.rotateAge}"
+      EMAIL    = "${var.adminEmail}"
+    }
+  }
+
 }
 
 resource "aws_lambda_permission" "allowRotateIAMKeysRule" {
